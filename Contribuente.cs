@@ -58,7 +58,7 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
             }
 
             // Assegnazione del genere determinato alla proprietà Genere della classe Contribuente
-            genere = genereselezionato;
+            genere = genereselezionato; 
 
             Console.WriteLine("Inserisci la tua data di Nascita");
             string dataNascitainput = Console.ReadLine();
