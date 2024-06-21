@@ -5,14 +5,21 @@
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Contribuente c = new Contribuente("Valentina", "Rossi", new DateTime(1980, 12, 10), "RSSVNT90L10H501W", Genere.F, "Milano", 45350);
+            try
+            {
+                Contribuente c = new Contribuente("Valentina", "Rossi", new DateTime(1980, 12, 10), "RSSVNT90L10H501W", Genere.F, "Milano", 45350);
 
-            Console.WriteLine(c.Description());
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Contribuente c2 = new Contribuente();
-            c2.InserimentoDati();
+                Console.WriteLine(c.Description());
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Contribuente c2 = new Contribuente();
+                c2.InserimentoDati();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

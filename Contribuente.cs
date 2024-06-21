@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,58 +17,74 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
     }
     internal class Contribuente
     {
-        private string Nome { get; set; }
-        private string Cognome { get; set; }
+        private string nome { get; set; }
+        private string cognome { get; set; }
 
-        private DateTime DataNascita { get; set; }
+        private DateTime dataNascita { get; set; }
 
-        private Genere Genere { get; set; }
+        private Genere genere { get; set; }
 
-        private string CodiceFiscale { get; set; }
-        private string ComuneResidenza { get; set; }
+        private string codiceFiscale { get; set; }
+        private string comuneResidenza { get; set; }
 
-        private decimal RedditoAnnuale { get; set; }
+        private decimal redditoAnnuale { get; set; }
 
         private decimal impostadaversare;
 
         public void InserimentoDati()
         {
             Console.WriteLine("inserisci nome");
-            string nome = Console.ReadLine();
+            string nomeinput = Console.ReadLine();
             Console.WriteLine("inserisci cognome");
-            string cognome = Console.ReadLine();
+            string cognomeinput = Console.ReadLine();
             Console.WriteLine("inserisci il tuo genere: M, F, A (Altro)");
             string genereIn = Console.ReadLine().ToUpper();
-            Console.WriteLine("Inserisci la tua data di Nascita");
-            string dataNascita = Console.ReadLine();
-            Console.WriteLine("Inserisci il tuo codice fiscale");
-            string codiceFiscale = Console.ReadLine();
-            Console.WriteLine("Inserisci il tuo comune di residenza");
-            string comuneResidenza = Console.ReadLine();
-            Console.WriteLine("Inserisci il tuo reddito");
-            string redditoAnnuale = Console.ReadLine();
 
-            Nome = nome;
-            Cognome = cognome;
-            Genere genere;
+            Genere genereselezionato;
+            // Switch per gestire l'input del genere dell'utente
             switch (genereIn)
             {
                 case "M":
-                    genere = Genere.M;
+                    genereselezionato = Genere.M;
                     break;
                 case "F":
-                    genere = Genere.F;
+                    genereselezionato = Genere.F;
+                    break;
+                case "A":
+                    genereselezionato = Genere.A;
                     break;
                 default:
-                    genere = Genere.A;
-                    break;
+                    throw new ArgumentException("Genere non valido. Inserire M, F o A.");
             }
-            Genere = genere;
 
-            DataNascita = DateTime.Parse(dataNascita);
-            CodiceFiscale = codiceFiscale;
-            ComuneResidenza = comuneResidenza;
-            RedditoAnnuale = int.Parse(redditoAnnuale);
+            // Assegnazione del genere determinato alla proprietà Genere della classe Contribuente
+            genere = genereselezionato;
+
+            Console.WriteLine("Inserisci la tua data di Nascita");
+            string dataNascitainput = Console.ReadLine();
+            DateTime dataNascita;
+            if (!DateTime.TryParseExact(dataNascitainput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataNascita))
+            {
+                throw new FormatException("Formato data non valido. Inserire nel formato dd/MM/yyyy.");
+            }
+
+            Console.WriteLine("Inserisci il tuo codice fiscale");
+            string codiceFiscaleinput = Console.ReadLine();
+            Console.WriteLine("Inserisci il tuo comune di residenza");
+            string comuneResidenzainput = Console.ReadLine();
+            Console.WriteLine("Inserisci il tuo reddito");
+            string redditoAnnualeinput = Console.ReadLine();
+
+            nome = nomeinput;
+            cognome = cognomeinput;
+
+            // Dichiarazione di una variabile locale per il genere
+           
+
+            dataNascita = DateTime.Parse(dataNascitainput);
+            codiceFiscale = codiceFiscaleinput;
+            comuneResidenza = comuneResidenzainput;
+            redditoAnnuale = int.Parse(redditoAnnualeinput);
             CalcoloScaglioniReddito();
             Console.WriteLine(Description());
             
@@ -77,13 +94,13 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
 
         public Contribuente(string nome, string cognome, DateTime dataNascita, string codiceFiscale, Genere sesso, string comuneResidenza, decimal redditoAnnuale)
         {
-            Nome = nome;
-            Cognome = cognome;
-            DataNascita = dataNascita;
-            CodiceFiscale = codiceFiscale;
-            Genere = sesso;
-            ComuneResidenza = comuneResidenza;
-            RedditoAnnuale = redditoAnnuale;
+            this.nome = nome;
+            this.cognome= cognome;
+            this.dataNascita = dataNascita;
+            this.codiceFiscale = codiceFiscale;
+            this.genere = sesso;
+            this.comuneResidenza= comuneResidenza;
+            this.redditoAnnuale= redditoAnnuale;
         }
 
         private decimal CalcoloScaglioniReddito()
@@ -100,25 +117,25 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
             decimal terzoscaglione = 27000 * aliquota3;
             decimal quartoscaglione = 20000 * aliquota4;
 
-            if (RedditoAnnuale >= 0 && RedditoAnnuale <= 15000)
+            if (redditoAnnuale >= 0 && redditoAnnuale <= 15000)
             {
-                impostadaversare = RedditoAnnuale * aliquota1;
+                impostadaversare = redditoAnnuale * aliquota1;
             }
-            else if (RedditoAnnuale >= 15001 && RedditoAnnuale <= 28000)
+            else if (redditoAnnuale >= 15001 && redditoAnnuale <= 28000)
             {
-                impostadaversare = primoscaglione + (RedditoAnnuale - 15000) * aliquota2;
+                impostadaversare = primoscaglione + (redditoAnnuale - 15000) * aliquota2;
             }
-            else if (RedditoAnnuale >= 28001 && RedditoAnnuale <= 55000)
+            else if (redditoAnnuale >= 28001 && redditoAnnuale <= 55000)
             {
-                impostadaversare = primoscaglione + secondoscaglione + (RedditoAnnuale - 28000) * aliquota3;
+                impostadaversare = primoscaglione + secondoscaglione + (redditoAnnuale - 28000) * aliquota3;
             }
-            else if (RedditoAnnuale >= 55001 && RedditoAnnuale <= 75000)
+            else if (redditoAnnuale >= 55001 && redditoAnnuale <= 75000)
             {
-                impostadaversare = primoscaglione + secondoscaglione + terzoscaglione + (RedditoAnnuale - 55000) * aliquota4;
+                impostadaversare = primoscaglione + secondoscaglione + terzoscaglione + (redditoAnnuale - 55000) * aliquota4;
             }
-            else if (RedditoAnnuale > 75000)
+            else if (redditoAnnuale > 75000)
             {
-                impostadaversare = primoscaglione + secondoscaglione + terzoscaglione + quartoscaglione + (RedditoAnnuale - 75000) * aliquota5;
+                impostadaversare = primoscaglione + secondoscaglione + terzoscaglione + quartoscaglione + (redditoAnnuale - 75000) * aliquota5;
             }
             return impostadaversare;
         }
@@ -127,7 +144,7 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
         public string Description()
         {
             CalcoloScaglioniReddito();
-            return $"Contribuente:{Nome}  {Cognome}; \nNato il {DataNascita.ToShortDateString()} ({Genere}); \nResidente in {ComuneResidenza}; \nCodiceFiscale: {CodiceFiscale}; \nReddito dichiarato {RedditoAnnuale}€,\nImposta da versare: {impostadaversare}€"; 
+            return $"Contribuente:{nome} {cognome}; \nNato il {dataNascita.ToShortDateString()} ({genere}); \nResidente in {comuneResidenza}; \nCodiceFiscale: {codiceFiscale}; \nReddito dichiarato {redditoAnnuale}€,\nImposta da versare: {impostadaversare}€"; 
         }
 
 
