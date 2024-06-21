@@ -17,17 +17,16 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
     }
     internal class Contribuente
     {
-        private string nome { get; set; }
-        private string cognome { get; set; }
+        private string nome;
+        private string cognome;
 
-        private DateTime dataNascita { get; set; }
+        private DateTime dataNascita;
+        private Genere genere;
 
-        private Genere genere { get; set; }
+        private string codiceFiscale;
+        private string comuneResidenza;
 
-        private string codiceFiscale { get; set; }
-        private string comuneResidenza { get; set; }
-
-        private decimal redditoAnnuale { get; set; }
+        private decimal redditoAnnuale;
 
         private decimal impostadaversare;
 
@@ -37,36 +36,57 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
             string nomeinput = Console.ReadLine();
             Console.WriteLine("inserisci cognome");
             string cognomeinput = Console.ReadLine();
-            Console.WriteLine("inserisci il tuo genere: M, F, A (Altro)");
-            string genereIn = Console.ReadLine().ToUpper();
 
             Genere genereselezionato;
+            bool genereValido = false;
+
             // Switch per gestire l'input del genere dell'utente  
-            switch (genereIn)
+            do
             {
-                case "M":
-                    genereselezionato = Genere.M;
-                    break;
-                case "F":
-                    genereselezionato = Genere.F;
-                    break;
-                case "A":
-                    genereselezionato = Genere.A;
-                    break;
-                default:
-                    throw new ArgumentException("Genere non valido. Inserire M, F o A.");
-            }
+                Console.WriteLine("Inserisci il tuo genere: M, F, A (Altro)");
+                string genereIn = Console.ReadLine().ToUpper();
 
-            // Assegnazione del genere determinato alla proprietà Genere della classe Contribuente
-            genere = genereselezionato; 
+                switch (genereIn)
+                {
+                    case "M":
+                        genereselezionato = Genere.M;
+                        genereValido = true;
+                        break;
+                    case "F":
+                        genereselezionato = Genere.F;
+                        genereValido = true;
+                        break;
+                    case "A":
+                        genereselezionato = Genere.A;
+                        genereValido = true;
+                        break;
+                    default:
+                        Console.WriteLine("Genere non valido. Inserire M, F o A.");
+                        Console.WriteLine("");
+                        break;
+                }
 
-            Console.WriteLine("Inserisci la tua data di Nascita");
-            string dataNascitainput = Console.ReadLine();
-            DateTime dataNascita;
-            if (!DateTime.TryParseExact(dataNascitainput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataNascita))
+            } while (!genereValido);
+
+            
+            string dataNascitainput;
+            DateTime dataNascitaa;
+            bool dataNascitaValida = false;
+            do
             {
-                throw new FormatException("Formato data non valido. Inserire nel formato dd/MM/yyyy.");
-            }
+                Console.WriteLine("Inserisci la tua data di Nascita nel formato dd/mm/yyyy");
+               dataNascitainput = Console.ReadLine();
+
+                if (DateTime.TryParseExact(dataNascitainput, "dd/mm/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dataNascita))
+                {
+                    dataNascitaValida = true;
+                }
+                else
+                {
+                    Console.WriteLine("Formato data non valido. Inserire nel formato dd/mm/yyyy.");
+                    Console.WriteLine("");
+                }   
+            } while (!dataNascitaValida);
 
             Console.WriteLine("Inserisci il tuo codice fiscale");
             string codiceFiscaleinput = Console.ReadLine();
@@ -77,10 +97,6 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
 
             nome = nomeinput;
             cognome = cognomeinput;
-
-            // Dichiarazione di una variabile locale per il genere
-           
-
             dataNascita = DateTime.Parse(dataNascitainput);
             codiceFiscale = codiceFiscaleinput;
             comuneResidenza = comuneResidenzainput;
@@ -144,6 +160,7 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
         public string Description()
         {
             CalcoloScaglioniReddito();
+            Console.WriteLine("");
             return $"Contribuente:{nome} {cognome}; \nNato il {dataNascita.ToShortDateString()} ({genere}); \nResidente in {comuneResidenza}; \nCodiceFiscale: {codiceFiscale}; \nReddito dichiarato {redditoAnnuale}€,\nImposta da versare: {impostadaversare}€"; 
         }
 
