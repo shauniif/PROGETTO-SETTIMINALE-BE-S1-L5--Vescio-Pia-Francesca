@@ -41,7 +41,7 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
             string genereIn = Console.ReadLine().ToUpper();
 
             Genere genereselezionato;
-            // Switch per gestire l'input del genere dell'utente
+            // Switch per gestire l'input del genere dell'utente  
             switch (genereIn)
             {
                 case "M":
