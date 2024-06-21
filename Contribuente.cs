@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
 {
+    public enum Genere
+    {
+        M,
+        F,
+        A
+    }
     internal class Contribuente
     {
         private string Nome { get; set; }
@@ -15,7 +21,7 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
 
         private DateTime DataNascita { get; set; }
 
-        private char Sesso { get; set; }
+        private Genere Genere { get; set; }
 
         private string CodiceFiscale { get; set; }
         private string ComuneResidenza { get; set; }
@@ -31,36 +37,51 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
             Console.WriteLine("inserisci cognome");
             string cognome = Console.ReadLine();
             Console.WriteLine("inserisci il tuo genere: M, F, A (Altro)");
-            string genere = Console.ReadLine();
+            string genereIn = Console.ReadLine().ToUpper();
             Console.WriteLine("Inserisci la tua data di Nascita");
             string dataNascita = Console.ReadLine();
             Console.WriteLine("Inserisci il tuo codice fiscale");
             string codiceFiscale = Console.ReadLine();
             Console.WriteLine("Inserisci il tuo comune di residenza");
             string comuneResidenza = Console.ReadLine();
-            Console.WriteLine("Inserisci il tuo reddito)");
+            Console.WriteLine("Inserisci il tuo reddito");
             string redditoAnnuale = Console.ReadLine();
 
             Nome = nome;
             Cognome = cognome;
-            Sesso = genere[0];
+            Genere genere;
+            switch (genereIn)
+            {
+                case "M":
+                    genere = Genere.M;
+                    break;
+                case "F":
+                    genere = Genere.F;
+                    break;
+                default:
+                    genere = Genere.A;
+                    break;
+            }
+            Genere = genere;
+
             DataNascita = DateTime.Parse(dataNascita);
             CodiceFiscale = codiceFiscale;
             ComuneResidenza = comuneResidenza;
             RedditoAnnuale = int.Parse(redditoAnnuale);
             CalcoloScaglioniReddito();
             Console.WriteLine(Description());
+            
 
         }
         public Contribuente() { }
 
-        public Contribuente(string nome, string cognome, DateTime dataNascita, string codiceFiscale, char sesso, string comuneResidenza, decimal redditoAnnuale)
+        public Contribuente(string nome, string cognome, DateTime dataNascita, string codiceFiscale, Genere sesso, string comuneResidenza, decimal redditoAnnuale)
         {
             Nome = nome;
             Cognome = cognome;
             DataNascita = dataNascita;
             CodiceFiscale = codiceFiscale;
-            Sesso = sesso;
+            Genere = sesso;
             ComuneResidenza = comuneResidenza;
             RedditoAnnuale = redditoAnnuale;
         }
@@ -106,7 +127,7 @@ namespace PROGETTO_SETTIMINALE_BE_S1_L5__Vescio_Pia_Francesca
         public string Description()
         {
             CalcoloScaglioniReddito();
-            return $"Contribuente:{Nome}  {Cognome}; \nNato il {DataNascita.ToShortDateString()} ({Sesso}); \nResidente in {ComuneResidenza}; \nCodiceFiscale: {CodiceFiscale}; \nReddito dichiarato {RedditoAnnuale}€,\nImposta da versare: {impostadaversare}€"; 
+            return $"Contribuente:{Nome}  {Cognome}; \nNato il {DataNascita.ToShortDateString()} ({Genere}); \nResidente in {ComuneResidenza}; \nCodiceFiscale: {CodiceFiscale}; \nReddito dichiarato {RedditoAnnuale}€,\nImposta da versare: {impostadaversare}€"; 
         }
 
 
